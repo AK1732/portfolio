@@ -148,6 +148,9 @@ function App() {
 
   useEffect(() => {
     const cursor = document.getElementById("cursorGlow");
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+    if (!cursor || !finePointer.matches) return undefined;
 
     const moveCursor = (event) => {
       cursor.style.left = `${event.clientX}px`;
@@ -177,6 +180,15 @@ function App() {
         item.removeEventListener("mouseleave", shrinkCursor);
       });
     };
+  }, []);
+
+  useEffect(() => {
+    const closeDesktopMenu = () => {
+      if (window.innerWidth > 900) setMenuOpen(false);
+    };
+
+    window.addEventListener("resize", closeDesktopMenu, { passive: true });
+    return () => window.removeEventListener("resize", closeDesktopMenu);
   }, []);
 
   const downloadResume = () => {
